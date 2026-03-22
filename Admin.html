@@ -422,4 +422,28 @@ function esc(s){return s?s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3000);}
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('page-login').classList.contains('active'))login();});
 </script>
+  <script>
+// 1. دالة التبديل بين صفحة القفل وصفحة الإدارة (للمعاينة فقط حالياً)
+function login() {
+    const pcode = document.getElementById('pcode').value;
+    const loginErr = document.querySelector('.login-err');
+
+    // كود الدخول التجريبي (مثلاً: 1234)
+    if (pcode === "1234") { 
+        // التوجيه لصفحة الداشبورد
+        // ملاحظة: تأكد أن اسم الملف هو dashboard.html وموجود في نفس المجلد
+        window.location.href = "dashboard.html"; 
+    } else {
+        loginErr.style.display = "block";
+        loginErr.innerText = "رمز الدخول غير صحيح، حاول مرة أخرى.";
+    }
+}
+
+// 2. دالة لجعل زر "Enter" في الكيبورد يقوم بالدخول أيضاً
+document.getElementById('pcode')?.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        login();
+    }
+});
+</script>
 </body></html>
