@@ -446,4 +446,51 @@ document.getElementById('pcode')?.addEventListener('keypress', function (e) {
     }
 });
 </script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // 1. ضع إعدادات مشروع عمر هنا (Firebase Config)
+  const firebaseConfig = {
+    apiKey: "ضع_هنا_API_KEY",
+    authDomain: "omarsaadi3.firebaseapp.com",
+    projectId: "omarsaadi3",
+    storageBucket: "omarsaadi3.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef123"
+  };
+
+  // تهيئة فايربيس
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  // 2. دالة تسجيل الدخول (برقم السري أو الإيميل)
+  async function login() {
+    const pcode = document.getElementById('pcode').value;
+    const loginErr = document.querySelector('.login-err');
+
+    // هنا افترضنا أنك تستخدم إيميل عمر كأدمن
+    // يمكنك تعديل هذا الجزء ليناسب طريقتك
+    if (pcode === "123456") { // الكود السري المؤقت
+        // تحويل لصفحة الداشبورد
+        // ملاحظة: في جيت هاب نستخدم مسار نسبي بدون /
+        window.location.href = "dashboard.html";
+    } else {
+        loginErr.style.display = "block";
+        loginErr.innerText = "الرمز السري غير صحيح";
+    }
+  }
+
+  // 3. جعل زر الإدخال (Enter) يعمل مع الكيبورد
+  document.getElementById('pcode').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        login();
+    }
+  });
+
+  // 4. وظائف الإدارة (إضافة دورة، حذف طالب، إلخ)
+  // سنربطها لاحقاً بمجرد أن تفتح صفحة الداشبورد
+</script>
 </body></html>
