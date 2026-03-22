@@ -273,26 +273,27 @@ body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--text);
 </footer>
 
 <script>
-const SK = {research:'alsaadi-research-v1',questions:'alsaadi-questions-v1',sqQuestions:'alsaadi-sq-v1',settings:'alsaadi-settings-v1'};
+const firebaseConfig={apiKey:"AIzaSyC1sZ0cJeQMJ6QdnxwFkcfK3AGir0TRuuk",authDomain:"tasil-3lmi.firebaseapp.com",projectId:"tasil-3lmi",storageBucket:"tasil-3lmi.firebasestorage.app",messagingSenderId:"596405733121",appId:"1:596405733121:web:0b96fc0a6cc643e6b77d00",measurementId:"G-799B2W49KK"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+const analytics=firebase.analytics();
+const STORE='store';
+async function fbGet(key){try{const d=await db.collection(STORE).doc(key).get();return d.exists?JSON.parse(d.data().v):null;}catch(e){return null;}}
+async function fbSet(key,val){try{await db.collection(STORE).doc(key).set({v:JSON.stringify(val)});}catch(e){console.error('fbSet',e);}}
 let allResearch=[],allQ={},sqQuestions=[],settings={};
 let currentResId=null,activeCat='الكل';
 
-const DEFAULT_SETTINGS={
-  instaUrl:'',instaHandle:'',
-  tiktokUrl:'',tiktokHandle:'',
-  telegramUrl:'',telegramHandle:''
-};
+const DEFAULT_SETTINGS={instaUrl:'',instaHandle:'',tiktokUrl:'',tiktokHandle:'',telegramUrl:'',telegramHandle:''};
 
 async function loadAll(){
-  try{const r=await window.storage.get(SK.research);if(r)allResearch=JSON.parse(r.value)}catch(e){}
-  try{const q=await window.storage.get(SK.questions);if(q)allQ=JSON.parse(q.value)}catch(e){}
-  try{const s=await window.storage.get(SK.sqQuestions);if(s)sqQuestions=JSON.parse(s.value)}catch(e){}
-  try{const st=await window.storage.get(SK.settings);if(st)settings=Object.assign({},DEFAULT_SETTINGS,JSON.parse(st.value))}catch(e){settings=Object.assign({},DEFAULT_SETTINGS)}
+  const [r,q,s,st]=await Promise.all([fbGet('research'),fbGet('questions'),fbGet('sqQuestions'),fbGet('settings')]);
+  if(r)allResearch=r; if(q)allQ=q; if(s)sqQuestions=s;
+  settings=st?Object.assign({},DEFAULT_SETTINGS,st):Object.assign({},DEFAULT_SETTINGS);
   renderSocial();renderGrid();renderSQ();updateStats();
 }
 
-async function saveQ(){await window.storage.set(SK.questions,JSON.stringify(allQ))}
-async function saveSQ(){await window.storage.set(SK.sqQuestions,JSON.stringify(sqQuestions))}
+async function saveQ(){await fbSet('questions',allQ);}
+async function saveSQ(){await fbSet('sqQuestions',sqQuestions);}
 
 /* NAV */
 function showPage(name){
@@ -453,5 +454,8 @@ function showToast(msg){const t=document.getElementById('toast');t.textContent=m
 
 window.addEventListener('load',loadAll);
 </script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
 </body>
 </html>
