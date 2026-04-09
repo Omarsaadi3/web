@@ -177,8 +177,8 @@ body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--text);
 </header>
 
 <nav class="header-nav">
-  <a onclick="showPage('home')" id="nav-home" class="active">🏠 الرئيسية</a>
-  <a onclick="showPage('questions-standalone')" id="nav-questions">📨 الأسئلة</a>
+  <a onclick="showPage('home')" id="nav-home" class="active">الرئيسية</a>
+  <a onclick="showPage('questions-standalone')" id="nav-questions">الأسئلة</a>
 </nav>
 
 <div class="social-bar" id="socialBar">
@@ -192,23 +192,38 @@ body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--text);
   <div class="home-container">
     <div class="stats-bar">
       <div class="stat-item"><span class="stat-num" id="sR">0</span><span class="stat-label">بحث شرعي</span></div>
+      <div class="stat-item"><span class="stat-num" id="sB">0</span><span class="stat-label">كتاب ورسالة</span></div>
       <div class="stat-item"><span class="stat-num" id="sQ">0</span><span class="stat-label">سؤال مطروح</span></div>
       <div class="stat-item"><span class="stat-num" id="sA">0</span><span class="stat-label">إجابة موثوقة</span></div>
     </div>
 
-    <h2 class="section-title">البحوث الشرعية</h2>
+    <h2 class="section-title">آخر البحوثات</h2>
 
     <div class="search-box">
-      <span class="search-icon">🔍</span>
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
       <input type="text" id="searchInput" placeholder="ابحث عن بحث..." oninput="renderGrid()">
     </div>
 
-    <div class="cat-tabs" id="catTabs">
-      <button class="cat-tab active" onclick="selectCat(this,\"الكل\")">الكل</button><button class="cat-tab" onclick="selectCat(this,\"عقدية\")">عقدية</button><button class="cat-tab" onclick="selectCat(this,\"فقهية\")">فقهية</button><button class="cat-tab" onclick="selectCat(this,\"حديثية\")">حديثية</button><button class="cat-tab" onclick="selectCat(this,\"تفسيرية\")">تفسيرية</button><button class="cat-tab" onclick="selectCat(this,\"تاريخية\")">تاريخية</button><button class="cat-tab" onclick="selectCat(this,\"عامة\")">عامة</button><button class="cat-tab" onclick="selectCat(this,\"تزكوية\")">تزكوية</button>
+    <div class="research-grid" id="researchGrid">
+      <div class="empty-state"><p>لا توجد بحوث حتى الآن.</p></div>
     </div>
 
-    <div class="research-grid" id="researchGrid">
-      <div class="empty-state"><div class="empty-icon">📚</div><p>لا توجد بحوث حتى الآن.</p></div>
+    <!-- قسم الكتب والرسائل البسيطة -->
+    <h2 class="section-title" style="margin-top: 50px;">الكتب والرسائل البسيطة</h2>
+
+    <div class="search-box">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input type="text" id="booksSearchInput" placeholder="ابحث عن كتاب أو رسالة..." oninput="renderBooks()">
+    </div>
+
+    <div class="research-grid" id="booksGrid">
+      <div class="empty-state"><p>لا توجد كتب أو رسائل حتى الآن.</p></div>
     </div>
   </div>
 </div>
@@ -220,11 +235,10 @@ body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--text);
     <div class="research-box">
       <h1 id="rpTitle"></h1>
       <div class="research-meta" id="rpMeta"></div>
-      <div class="ornament">❧ ❧ ❧</div>
       <div class="research-body" id="rpBody"></div>
     </div>
     <div class="qs-section">
-      <h2>📨 الأسئلة والاستفسارات</h2>
+      <h2>الأسئلة والاستفسارات</h2>
       <div class="ask-form">
         <input type="text" id="qInput" placeholder="اكتب سؤالك هنا...">
         <button class="btn-primary" onclick="submitQ()">إرسال</button>
@@ -234,26 +248,41 @@ body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--text);
   </div>
 </div>
 
+<!-- ========== BOOK PAGE ========== -->
+<div class="page" id="page-book">
+  <div class="rp-container">
+    <a class="back-btn" onclick="showPage('home')">→ العودة للرئيسية</a>
+    <div class="research-box">
+      <h1 id="bookTitle"></h1>
+      <div class="research-meta" id="bookMeta"></div>
+      <div class="research-body" id="bookBody"></div>
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--cream2);">
+        <a id="bookDownloadLink" class="btn-primary" style="display: inline-block; text-decoration: none; text-align: center;" download>تحميل الكتاب/الرسالة</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ========== STANDALONE QUESTIONS PAGE ========== -->
 <div class="page" id="page-questions-standalone">
   <div class="sq-container">
     <div class="sq-hero">
-      <h1>📨 صفحة الأسئلة العامة</h1>
+      <h1>صفحة الأسئلة العامة</h1>
       <p>يمكنك طرح سؤالك الشرعي هنا وسيتم الإجابة عليه بإذن الله</p>
     </div>
 
     <div class="sq-ask-box">
-      <h3>🖊️ اطرح سؤالاً جديداً</h3>
+      <h3>اطرح سؤالاً جديداً</h3>
       <div class="sq-form">
         <input type="text" id="sqName" placeholder="اسمك (اختياري)">
         <textarea id="sqText" placeholder="اكتب سؤالك هنا..."></textarea>
-        <button class="btn-primary" onclick="submitSQ()">📤 إرسال السؤال</button>
+        <button class="btn-primary" onclick="submitSQ()">إرسال السؤال</button>
       </div>
     </div>
 
     <h2 class="section-title">الأسئلة المطروحة</h2>
     <div class="sq-questions" id="sqList">
-      <div class="empty-state"><div class="empty-icon">💬</div><p>لا توجد أسئلة بعد.</p></div>
+      <div class="empty-state"><p>لا توجد أسئلة بعد.</p></div>
     </div>
   </div>
 </div>
@@ -263,10 +292,10 @@ body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--text);
   <div class="footer-divider"></div>
   <div class="footer-social">
     <a href="https://www.instagram.com/f.6jnj?igsh=MTZ5YncxcWpiNTRuNg%3D%3D&utm_source=qr" target="_blank" rel="noopener">
-      <span class="icon">📸</span> إنستقرام
+      إنستقرام
     </a>
     <a href="https://t.me/Abu_Abdulaziz_Omar" target="_blank" rel="noopener">
-      <span class="icon">✈️</span> قناة التيليجرام
+      قناة التيليجرام
     </a>
   </div>
   <div class="footer-copy">© موقع أبو عبد العزيز عمر السعدي — جميع الحقوق محفوظة</div>
@@ -280,16 +309,16 @@ const analytics=firebase.analytics();
 const STORE='store';
 async function fbGet(key){try{const d=await db.collection(STORE).doc(key).get();return d.exists?JSON.parse(d.data().v):null;}catch(e){return null;}}
 async function fbSet(key,val){try{await db.collection(STORE).doc(key).set({v:JSON.stringify(val)});}catch(e){console.error('fbSet',e);}}
-let allResearch=[],allQ={},sqQuestions=[],settings={};
-let currentResId=null,activeCat='الكل';
+let allResearch=[],allQ={},sqQuestions=[],settings={},allBooks=[];
+let currentResId=null,activeCat='الكل',currentBookId=null;
 
 const DEFAULT_SETTINGS={instaUrl:'',instaHandle:'',tiktokUrl:'',tiktokHandle:'',telegramUrl:'',telegramHandle:''};
 
 async function loadAll(){
-  const [r,q,s,st]=await Promise.all([fbGet('research'),fbGet('questions'),fbGet('sqQuestions'),fbGet('settings')]);
-  if(r)allResearch=r; if(q)allQ=q; if(s)sqQuestions=s;
+  const [r,q,s,st,b]=await Promise.all([fbGet('research'),fbGet('questions'),fbGet('sqQuestions'),fbGet('settings'),fbGet('books')]);
+  if(r)allResearch=r; if(q)allQ=q; if(s)sqQuestions=s; if(b)allBooks=b;
   settings=st?Object.assign({},DEFAULT_SETTINGS,st):Object.assign({},DEFAULT_SETTINGS);
-  renderSocial();renderGrid();renderSQ();updateStats();
+  renderSocial();renderGrid();renderSQ();renderBooks();updateStats();
 }
 
 async function saveQ(){await fbSet('questions',allQ);}
@@ -312,16 +341,16 @@ function renderSocial(){
   const footer=document.getElementById('footerSocial');
   let html='',fhtml='';
   if(settings.instaUrl){
-    html+=`<a href="${settings.instaUrl}" target="_blank" class="social-link insta"><span class="social-icon">📸</span> ${settings.instaHandle||'إنستاغرام'}</a>`;
-    fhtml+=`<a href="${settings.instaUrl}" target="_blank">📸 ${settings.instaHandle||'إنستاغرام'}</a>`;
+    html+=`<a href="${settings.instaUrl}" target="_blank" class="social-link insta">${settings.instaHandle||'إنستاغرام'}</a>`;
+    fhtml+=`<a href="${settings.instaUrl}" target="_blank">${settings.instaHandle||'إنستاغرام'}</a>`;
   }
   if(settings.tiktokUrl){
-    html+=`<a href="${settings.tiktokUrl}" target="_blank" class="social-link tiktok"><span class="social-icon">🎵</span> ${settings.tiktokHandle||'تيك توك'}</a>`;
-    fhtml+=`<a href="${settings.tiktokUrl}" target="_blank">🎵 ${settings.tiktokHandle||'تيك توك'}</a>`;
+    html+=`<a href="${settings.tiktokUrl}" target="_blank" class="social-link tiktok">${settings.tiktokHandle||'تيك توك'}</a>`;
+    fhtml+=`<a href="${settings.tiktokUrl}" target="_blank">${settings.tiktokHandle||'تيك توك'}</a>`;
   }
   if(settings.telegramUrl){
-    html+=`<a href="${settings.telegramUrl}" target="_blank" class="social-link telegram"><span class="social-icon">✈️</span> ${settings.telegramHandle||'تيليجرام'}</a>`;
-    fhtml+=`<a href="${settings.telegramUrl}" target="_blank">✈️ ${settings.telegramHandle||'تيليجرام'}</a>`;
+    html+=`<a href="${settings.telegramUrl}" target="_blank" class="social-link telegram">${settings.telegramHandle||'تيليجرام'}</a>`;
+    fhtml+=`<a href="${settings.telegramUrl}" target="_blank">${settings.telegramHandle||'تيليجرام'}</a>`;
   }
   bar.innerHTML=html||'<span style="font-size:13px;color:var(--text-muted)">تابعنا على منصات التواصل الاجتماعي</span>';
   footer.innerHTML=fhtml;
@@ -340,22 +369,55 @@ function renderGrid(){
   const search=document.getElementById('searchInput').value.trim();
   const grid=document.getElementById('researchGrid');
   let list=allResearch;
-  if(activeCat&&activeCat!=='الكل')list=list.filter(r=>r.cat===activeCat);
   if(search)list=list.filter(r=>r.title.includes(search));
-  if(!list.length){grid.innerHTML='<div class="empty-state"><div class="empty-icon">📚</div><p>'+(search||activeCat!=='الكل'?'لا توجد نتائج.':'لا توجد بحوث حتى الآن.')+'</p></div>';return}
+  if(!list.length){grid.innerHTML='<div class="empty-state"><p>'+(search?'لا توجد نتائج.':'لا توجد بحوث حتى الآن.')+'</p></div>';return}
   grid.innerHTML=list.map((r,i)=>`
     <div class="research-card" onclick="openResearch('${r.id}')">
       <div class="card-number">${i+1}</div>
       <div class="card-info">
         <div class="card-title">${esc(r.title)}</div>
-        ${r.cat?`<span class="card-cat-badge">${r.cat}</span>`:''}
       </div>
       <div class="card-arrow">←</div>
     </div>`).join('');
 }
 
+/* BOOKS */
+function renderBooks(){
+  const search=document.getElementById('booksSearchInput').value.trim();
+  const grid=document.getElementById('booksGrid');
+  let list=allBooks;
+  if(search)list=list.filter(b=>b.title.includes(search));
+  if(!list.length){grid.innerHTML='<div class="empty-state"><p>'+(search?'لا توجد نتائج.':'لا توجد كتب أو رسائل حتى الآن.')+'</p></div>';return}
+  grid.innerHTML=list.map((b,i)=>`
+    <div class="research-card" onclick="openBook('${b.id}')">
+      <div class="card-number">${i+1}</div>
+      <div class="card-info">
+        <div class="card-title">${esc(b.title)}</div>
+      </div>
+      <div class="card-arrow">←</div>
+    </div>`).join('');
+}
+
+function openBook(id){
+  const b=allBooks.find(x=>x.id===id);
+  if(!b)return;
+  currentBookId=id;
+  document.getElementById('bookTitle').textContent=b.title;
+  document.getElementById('bookMeta').textContent='تاريخ الإضافة: '+b.date;
+  document.getElementById('bookBody').textContent=b.description||'';
+  const downloadLink=document.getElementById('bookDownloadLink');
+  if(b.fileUrl){
+    downloadLink.href=b.fileUrl;
+    downloadLink.style.display='inline-block';
+  }else{
+    downloadLink.style.display='none';
+  }
+  showPage('book');
+}
+
 function updateStats(){
   document.getElementById('sR').textContent=allResearch.length;
+  document.getElementById('sB').textContent=allBooks.length;
   const allQFlat=Object.values(allQ).flat();
   const sqCount=sqQuestions.length;
   document.getElementById('sQ').textContent=allQFlat.length+sqCount;
@@ -383,11 +445,11 @@ function renderQList(resId){
       <div class="q-header"><div class="q-icon">؟</div><div class="q-text">${esc(q.text)}</div><div class="q-date">${q.date}</div></div>
       <div class="a-section">${(q.answers||[]).map(a=>`
         <div class="a-item ${a.verified?'verified':''}">
-          ${a.verified?'<div class="verified-badge">✅ إجابة موثوقة — تم سؤال شيخ</div>':''}
+          ${a.verified?'<div class="verified-badge">إجابة موثوقة — تم سؤال شيخ</div>':''}
           <div class="a-text">${esc(a.text)}</div><div class="a-date">${a.date}</div>
         </div>`).join('')}</div>
       <div class="a-form">
-        <button class="a-toggle" onclick="toggleA('ab-${q.id}')">💬 أضف إجابة</button>
+        <button class="a-toggle" onclick="toggleA('ab-${q.id}')">أضف إجابة</button>
         <div class="a-input-area" id="ab-${q.id}">
           <input type="text" placeholder="إجابتك..." id="ai-${q.id}">
           <button class="btn-sm" onclick="submitA('${q.id}')">إرسال</button>
@@ -400,10 +462,10 @@ function toggleA(id){document.getElementById(id).classList.toggle('open')}
 
 async function submitQ(){
   const inp=document.getElementById('qInput');const text=inp.value.trim();
-  if(!text){showToast('⚠️ اكتب السؤال أولاً');return}
+  if(!text){showToast('اكتب السؤال أولاً');return}
   if(!allQ[currentResId])allQ[currentResId]=[];
   allQ[currentResId].unshift({id:uid(),text,date:nowDate(),answers:[]});
-  await saveQ();inp.value='';renderQList(currentResId);updateStats();showToast('✅ تم إرسال سؤالك');
+  await saveQ();inp.value='';renderQList(currentResId);updateStats();showToast('تم إرسال سؤالك');
 }
 
 async function submitA(qid){
@@ -411,25 +473,25 @@ async function submitA(qid){
   const q=(allQ[currentResId]||[]).find(x=>x.id===qid);if(!q)return;
   if(!q.answers)q.answers=[];
   q.answers.push({id:uid(),text,date:nowDate(),verified:false});
-  await saveQ();renderQList(currentResId);updateStats();showToast('✅ تمت إضافة إجابتك');
+  await saveQ();renderQList(currentResId);updateStats();showToast('تمت إضافة إجابتك');
 }
 
 /* STANDALONE QUESTIONS */
 function renderSQ(){
   const c=document.getElementById('sqList');
-  if(!sqQuestions.length){c.innerHTML='<div class="empty-state"><div class="empty-icon">💬</div><p>لا توجد أسئلة بعد. كن أول من يسأل!</p></div>';return}
+  if(!sqQuestions.length){c.innerHTML='<div class="empty-state"><p>لا توجد أسئلة بعد. كن أول من يسأل!</p></div>';return}
   c.innerHTML=sqQuestions.map(q=>`
     <div class="sq-q-item">
       <div class="sq-q-header">
         <div style="flex:1">
-          ${q.name?`<div class="sq-q-name">👤 ${esc(q.name)}</div>`:''}
+          ${q.name?`<div class="sq-q-name">${esc(q.name)}</div>`:''}
           <div class="sq-q-text">${esc(q.text)}</div>
         </div>
         <div class="sq-q-date">${q.date}</div>
       </div>
       <div class="sq-answers">${(q.answers||[]).map(a=>`
         <div class="a-item ${a.verified?'verified':''}">
-          ${a.verified?'<div class="verified-badge">✅ إجابة موثوقة — تم سؤال شيخ</div>':''}
+          ${a.verified?'<div class="verified-badge">إجابة موثوقة — تم سؤال شيخ</div>':''}
           <div class="a-text">${esc(a.text)}</div><div class="a-date">${a.date}</div>
         </div>`).join('')}</div>
     </div>`).join('');
@@ -438,12 +500,12 @@ function renderSQ(){
 async function submitSQ(){
   const name=document.getElementById('sqName').value.trim();
   const text=document.getElementById('sqText').value.trim();
-  if(!text){showToast('⚠️ اكتب السؤال أولاً');return}
+  if(!text){showToast('اكتب السؤال أولاً');return}
   sqQuestions.unshift({id:uid(),name,text,date:nowDate(),answers:[]});
   await saveSQ();
   document.getElementById('sqName').value='';
   document.getElementById('sqText').value='';
-  renderSQ();updateStats();showToast('✅ تم إرسال سؤالك بنجاح');
+  renderSQ();updateStats();showToast('تم إرسال سؤالك بنجاح');
 }
 
 /* UTILS */
